@@ -1,0 +1,74 @@
+<variant-radios
+  class="no-js-hidden"
+  data-section="{{ section.id }}"
+  data-url="{{ product.url }}"
+  {{ block.shopify_attributes }}
+> 
+
+
+
+ {% comment %} {% render 'swatch' for product.options as swatch  %}{% endcomment %}
+
+ 
+{%- for option in product.options_with_values -%}
+
+    {% assign one_variant = false %}
+    {% if product.options.size == 1 %}
+      {% assign one_variant = true %}
+    {% endif%}
+
+    {% assign productVariant = product.variants %}
+    {% if option.name contains "Color" %}
+       
+    {% else %}
+    <fieldset class="js product-form__input {% if one_variant == true %} full_width {% endif %}">
+      <legend class="form__label">{{ option.name }}</legend>
+      {% assign i = 0 %}
+      {%- for value in option.values -%}
+      {% assign i = i | plus: 1 %}
+      {% assign j = i | minus: 1 %}
+
+        <input
+          type="radio"
+          id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+          name="{{ option.name }}"
+          value="{{ value | escape }}"
+          form="{{ product_form_id }}"
+          {% if option.selected_value == value %}
+            checked
+          {% endif %}
+        >
+        <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
+          {% if value contains 'Subscription' %}
+             {% assign first_value = value | split: 'Subscription' | first %}
+             <span>{{ first_value }}</span>
+             <span class="italic">Subscription</span>
+          {% else %}
+            <span>{{ value }}</span>
+          {% endif %}
+          
+          {% assign pack_value = value | split: '-' | first %}
+          <span>
+            {{ productVariant[j].price | divided_by: pack_value | money }}/Bottle
+          </span>
+
+          {%- if productVariant[j].compare_at_price %}
+          <span class="save_percentage">
+            {% assign original_price = productVariant[j].price | money_without_currency %}
+            {% assign discount_price = productVariant[j].compare_at_price  | minus: productVariant[j].price | money_without_currency %}
+            Save {{ discount_price | divided_by: original_price | times: 100.0 | floor }}%
+          </span>
+          {%- endif -%}
+
+        </label>
+      {%- endfor -%}
+    </fieldset>
+    {% endif %}
+
+
+   
+  {%- endfor -%}
+  <script type="application/json">
+    {{ product.variants | json }}
+  </script>
+</variant-radios>
