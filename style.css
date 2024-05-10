@@ -1,0 +1,45 @@
+.product-form__input.full_width input[type='radio'] + label {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+
+    border-radius: 0;
+}
+/*Working dawn theme*/
+.product-form__input input[type='radio']:checked + label {
+    background: transparent !important;
+    color: rgb(var(--color-foreground)) !important;
+    box-shadow: 0px 0 1px 1px rgb(var(--color-foreground));
+}
+span.save_percentage {
+    position: absolute;
+    top: -48%;
+    background-image: linear-gradient(225deg, #FDE49E, white);
+    padding: 5px 10px;
+    right: 10px;
+    font-style: italic;
+    z-index: 1;
+    font-size: 13px;
+}
+fieldset.product-form__input label{
+  margin-top: 25px !important;
+  margin-bottom: 5px !important;
+  font-size: 18px !important;
+}
+fieldset.product-form__input label:nth-of-type(1){
+  margin-top: 10px !important;
+}
+.product-form__input label:nth-of-type(2) .save_percentage{
+  background-image: linear-gradient(225deg, #FEB941, white);
+}
+.product-form__input label:nth-of-type(3) .save_percentage{
+  background-image: linear-gradient(225deg, #DD761C, white);
+}
+.product-form__input label:nth-of-type(3) span{
+  font-weight: 700;
+}
+.product-form__input label:nth-of-type(3) span.italic {
+    font-style: italic;
+    font-weight: 400;
+}
