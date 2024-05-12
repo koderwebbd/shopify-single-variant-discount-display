@@ -45,11 +45,11 @@
             
             {% assign pack_value = value | split: '-' | first %}
 
-
-             
+            {% if value contains '-' %}  
             <span class="pack_value_price">
               {{ productVariant[j].price | divided_by: pack_value | money }}/Bottle
             </span>
+            {% endif %}
           
 
             {%- if productVariant[j].compare_at_price %}
