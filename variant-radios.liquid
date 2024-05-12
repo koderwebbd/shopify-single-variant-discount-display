@@ -4,7 +4,7 @@
   data-url="{{ product.url }}"
   {{ block.shopify_attributes }}
 > 
- 
+
 {%- for option in product.options_with_values -%}
 
     {% assign one_variant = false %}
@@ -34,27 +34,37 @@
           {% endif %}
         >
         <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}">
-          {% if value contains 'Subscription' %}
-             {% assign first_value = value | split: 'Subscription' | first %}
-             <span>{{ first_value }}</span>
-             <span class="italic">Subscription</span>
+          {% if one_variant == true  %}
+            {% if value contains 'Subscription' %}
+               {% assign first_value = value | split: 'Subscription' | first %}
+               <span>{{ first_value }}</span>
+               <span class="italic">Subscription</span>
+            {% else %}
+              <span>{{ value }}</span>
+            {% endif %}
+            
+            {% assign pack_value = value | split: '-' | first %}
+
+
+             
+            <span class="pack_value_price">
+              {{ productVariant[j].price | divided_by: pack_value | money }}/Bottle
+            </span>
+          
+
+            {%- if productVariant[j].compare_at_price %}
+            <span class="save_percentage">
+              {% assign original_price = productVariant[j].price %}
+              {% assign compare_price = productVariant[j].compare_at_price %}
+              {% assign save_price = compare_price | minus: original_price | times: 100.0 | divided_by: compare_price %}
+
+              {% comment %}You save {{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price }}%{% endcomment %}
+              Save {{ save_price | floor }}%
+            </span>
+            {%- endif -%}
           {% else %}
             <span>{{ value }}</span>
           {% endif %}
-          
-          {% assign pack_value = value | split: '-' | first %}
-          <span>
-            {{ productVariant[j].price | divided_by: pack_value | money }}/Bottle
-          </span>
-
-          {%- if productVariant[j].compare_at_price %}
-          <span class="save_percentage">
-            {% assign original_price = productVariant[j].price | money_without_currency %}
-            {% assign discount_price = productVariant[j].compare_at_price  | minus: productVariant[j].price | money_without_currency %}
-            Save {{ discount_price | divided_by: original_price | times: 100.0 | floor }}%
-          </span>
-          {%- endif -%}
-
         </label>
       {%- endfor -%}
     </fieldset>
